@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manish CSE | Computer Science Engineer & Developer</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'dark-bg': '#0F172A', // Slate 900
+                        'accent-blue': '#3B82F6', // Blue 500
+                        'soft-text': '#E2E8F0', // Slate 200
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for smooth scrolling and clean font loading */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Inter', sans-serif;
+        }
+        .section-header {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem; /* Space for the underline */
+        }
+        .section-header::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50%;
+            height: 4px;
+            background-color: #3B82F6; /* accent-blue */
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-soft-text leading-relaxed">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-dark-bg/95 backdrop-blur-sm shadow-md">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-accent-blue tracking-wider">Manish CSE</a>
+            <nav class="hidden md:block">
+                <a href="#about" class="ml-6 text-sm font-medium hover:text-accent-blue transition duration-150">About</a>
+                <a href="#experience" class="ml-6 text-sm font-medium hover:text-accent-blue transition duration-150">Experience</a>
+                <a href="#projects" class="ml-6 text-sm font-medium hover:text-accent-blue transition duration-150">Projects</a>
+                <a href="#contact" class="ml-6 text-sm font-medium hover:text-accent-blue transition duration-150">Contact</a>
+            </nav>
+            <!-- Mobile Menu Placeholder (Not fully implemented for brevity, but designed responsively) -->
+            <button class="md:hidden text-soft-text hover:text-accent-blue">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+
+        <!-- 1. Introduction Section -->
+        <section id="intro" class="mb-24 md:mb-32 pt-10">
+            <div class="max-w-3xl">
+                <p class="text-lg text-accent-blue font-semibold mb-2">Hello, I'm</p>
+                <h1 class="text-6xl sm:text-7xl font-extrabold text-white mb-4">Manish CSE.</h1>
+                <h2 class="text-3xl sm:text-4xl font-semibold text-gray-400 mb-6">Software Engineer specializing in scalable cloud applications.</h2>
+                <p class="text-xl text-gray-300">
+                    I'm a Computer Science graduate focused on building high-performance backend systems and elegant solutions using modern microservices architecture. Currently exploring [Your Current Area of Focus, e.g., Generative AI Integration].
+                </p>
+                <div class="mt-8 flex space-x-4">
+                    <a href="#projects" class="px-6 py-3 bg-accent-blue text-white font-medium rounded-lg shadow-lg hover:bg-blue-600 transition duration-300 transform hover:scale-105">View Projects</a>
+                    <a href="#contact" class="px-6 py-3 border border-gray-600 text-soft-text font-medium rounded-lg hover:bg-gray-700 transition duration-300">Get In Touch</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. About Section -->
+        <section id="about" class="py-12 md:py-16 border-t border-gray-800">
+            <h3 class="text-4xl font-bold section-header mb-8">About Me</h3>
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="md:col-span-2 text-gray-300 space-y-4">
+                    <p>I apply computer science fundamentals to develop efficient and robust code. My expertise lies in designing, developing, and maintaining complex applications, with a strong focus on distributed systems and API design.</p>
+                    <p>I have a passion for optimizing code performance and ensuring high reliability, frequently working with **Java (Spring Boot)** and cloud platforms like **AWS**. I am dedicated to continuous learning, particularly in areas like data structures, algorithms, and automated quality assurance.</p>
+                </div>
+                <div class="md:col-span-1">
+                    <h4 class="text-xl font-semibold text-white mb-4">Core Stack & Skills</h4>
+                    <ul class="grid grid-cols-2 gap-2 text-sm text-gray-400">
+                        <li>Java / Spring Boot</li>
+                        <li>Python / FastAPI</li>
+                        <li>AWS / Terraform</li>
+                        <li>PostgreSQL / Redis</li>
+                        <li>React / Next.js</li>
+                        <li>RESTful APIs</li>
+                        <li>Algorithms & DS</li>
+                        <li>CI/CD (Jenkins/Git)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Experience Section -->
+        <section id="experience" class="py-12 md:py-16 border-t border-gray-800">
+            <h3 class="text-4xl font-bold section-header mb-12">Experience</h3>
+
+            <!-- Job 1 -->
+            <div class="relative pl-8 pb-12 group">
+                <div class="absolute w-2 h-full bg-gray-700 rounded-full left-0 top-0">
+                    <div class="absolute w-4 h-4 bg-accent-blue rounded-full -left-1 top-0 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                </div>
+                <h4 class="text-2xl font-semibold text-white">Software Development Engineer</h4>
+                <p class="text-accent-blue font-medium mb-1">Global Tech Services</p>
+                <p class="text-sm text-gray-400 mb-3">2021 – Present | Mumbai, India</p>
+                <ul class="list-disc ml-5 text-gray-300 space-y-2">
+                    <li>Developed and maintained core API services, serving over **100,000 active users** daily with 99.9% uptime.</li>
+                    <li>Reduced latency by 20% in the data aggregation layer by optimizing Java algorithms and implementing caching strategies (Redis).</li>
+                    <li>Collaborated on security reviews and implemented token-based authentication (OAuth 2.0) across all service endpoints.</li>
+                </ul>
+            </div>
+
+            <!-- Job 2 -->
+            <div class="relative pl-8 pb-12 group">
+                <div class="absolute w-2 h-full bg-gray-700 rounded-full left-0 top-0">
+                    <div class="absolute w-4 h-4 bg-accent-blue rounded-full -left-1 top-0 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                </div>
+                <h4 class="text-2xl font-semibold text-white">Associate Software Engineer</h4>
+                <p class="text-accent-blue font-medium mb-1">Startup Innovation Hub</p>
+                <p class="text-sm text-gray-400 mb-3">2019 – 2021 | Hyderabad, India</p>
+                <ul class="list-disc ml-5 text-gray-300 space-y-2">
+                    <li>Contributed to the front-end development of the flagship application using React and TypeScript.</li>
+                    <li>Wrote comprehensive unit and integration tests using JUnit and Mockito to ensure code quality.</li>
+                </ul>
+            </div>
+            
+            <a href="#" class="inline-block mt-4 text-accent-blue hover:underline font-medium">Download Full Resume (PDF) &rarr;</a>
+        </section>
+
+        <!-- 4. Projects Section -->
+        <section id="projects" class="py-12 md:py-16 border-t border-gray-800">
+            <h3 class="text-4xl font-bold section-header mb-12">Selected Projects</h3>
+            
+            <div class="space-y-10">
+                
+                <!-- Project Card 1: Distributed Load Balancer -->
+                <div class="p-6 bg-gray-800 rounded-xl shadow-xl hover:shadow-2xl hover:border-accent-blue border border-transparent transition duration-300">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
+                        <h4 class="text-xl font-bold text-white">Distributed Load Balancer Simulation</h4>
+                        <span class="text-sm text-gray-400 mt-1 sm:mt-0">Java, Multi-threading, System Design</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">A proof-of-concept project demonstrating various load balancing algorithms (Round Robin, Least Connections) using Java's concurrent libraries to manage simulated server traffic.</p>
+                    <ul class="flex flex-wrap gap-3">
+                        <li class="bg-gray-700 text-xs text-soft-text px-3 py-1 rounded-full">Concurrency</li>
+                        <li class="bg-gray-700 text-xs text-soft-text px-3 py-1 rounded-full">Low-Level Design</li>
+                        <li class="bg-gray-700 text-xs text-soft-text px-3 py-1 rounded-full">Performance Simulation</li>
+                    </ul>
+                    <a href="#" class="mt-4 inline-block text-accent-blue hover:text-blue-400 font-medium text-sm">View Source Code (Placeholder) &rarr;</a>
+                </div>
+
+                <!-- Project Card 2: Microservices Monitoring Dashboard -->
+                <div class="p-6 bg-gray-800 rounded-xl shadow-xl hover:shadow-2xl hover:border-accent-blue border border-transparent transition duration-300">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
+                        <h4 class="text-xl font-bold text-white">Real-Time Monitoring Dashboard</h4>
+                        <span class="text-sm text-gray-400 mt-1 sm:mt-0">Python, React, Prometheus</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">A centralized dashboard to display real-time metrics (CPU, Memory, Latency) aggregated from various microservices using Prometheus and Grafana, simplifying operational debugging.</p>
+                    <ul class="flex flex-wrap gap-3">
+                        <li class="bg-gray-700 text-xs text-soft-text px-3 py-1 rounded-full">Observability</li>
+                        <li class="bg-gray-700 text-xs text-soft-text px-3 py-1 rounded-full">Data Visualization</li>
+                        <li class="bg-gray-700 text-xs text-soft-text px-3 py-1 rounded-full">Polyglot Development</li>
+                    </ul>
+                    <a href="#" class="mt-4 inline-block text-accent-blue hover:text-blue-400 font-medium text-sm">View Project Details (Placeholder) &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Contact Section -->
+        <section id="contact" class="py-12 md:py-16 border-t border-gray-800 text-center">
+            <h3 class="text-4xl font-bold section-header mx-auto mb-8">Get In Touch</h3>
+            <p class="max-w-xl mx-auto text-xl text-gray-300 mb-8">
+                I'm always keen on discussing new software challenges, system architecture, and cutting-edge technologies. Feel free to connect or send a direct email.
+            </p>
+            
+            <a href="mailto:manishcse@example.com" class="px-8 py-4 border-2 border-accent-blue text-accent-blue font-semibold text-lg rounded-lg hover:bg-accent-blue hover:text-white transition duration-300 shadow-md">
+                Say Hello
+            </a>
+
+            <div class="mt-10 flex justify-center space-x-6">
+                <!-- Placeholder Icons for GitHub/LinkedIn/Twitter -->
+                <a href="https://github.com/manishcse" target="_blank" class="text-gray-400 hover:text-white transition duration-300">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.884-.015-1.745-2.784.605-3.367-1.341-3.367-1.341-.454-1.156-1.11-1.46-1.11-1.46-.909-.62.068-.608.068-.608 1.004.07 1.531 1.032 1.531 1.032.892 1.528 2.341 1.087 2.91.831.091-.645.356-1.087.645-1.334-2.22-.25-4.555-1.11-4.555-4.927 0-1.088.389-1.979 1.029-2.675-.102-.25-.446-1.266.098-2.638 0 0 .84-.268 2.75 1.022A9.702 9.702 0 0112 5.093c.85.004 1.705.115 2.504.337 1.909-1.29 2.747-1.022 2.747-1.022.546 1.372.202 2.388.099 2.638.64.696 1.028 1.587 1.028 2.675 0 3.826-2.338 4.673-4.566 4.92.359.31.678.924.678 1.855 0 1.335-.012 2.417-.012 2.747 0 .267.18.575.688.483C19.137 20.198 22 16.442 22 12.017 22 6.484 17.523 2 12 2Z" clip-rule="evenodd"/></svg>
+                </a>
+                <a href="https://linkedin.com/in/manishcse" target="_blank" class="text-gray-400 hover:text-white transition duration-300">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3v9zM6.5 8.25A1.75 1.75 0 118.25 6.5 1.75 1.75 0 016.5 8.25zM19 19h-3v-4.72c0-1.19-.48-1.59-1.31-1.59-1.31 0-1.69.96-1.69 2.48V19h-3v-9h3v1.39c.65-.95 1.25-1.64 2.85-1.64 2.07 0 3.65 1.37 3.65 4.38V19z"/></svg>
+                </a>
+                <!-- Add other links as needed (e.g., Twitter, Blog) -->
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-gray-800 text-center text-sm text-gray-500">
+        <p>&copy; 2024 Manish CSE. Designed and built with Tailwind CSS.</p>
+    </footer>
+
+    <script>
+        // Simple JavaScript for smooth scrolling in mobile/desktop navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
