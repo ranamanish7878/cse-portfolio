@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manish CSE | Computer Science Engineer & Developer</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'dark-bg': '#0F172A', // Slate 900
+                        'accent-blue': '#3B82F6', // Blue 500
+                        'soft-text': '#E2E8F0', // Slate 200
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for smooth scrolling and clean font loading */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Inter', sans-serif;
+        }
+        .section-header {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem; /* Space for the underline */
+        }
+        .section-header::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50%;
+            height: 4px;
+            background-color: #3B82F6; /* accent-blue */
+            border-radius: 9999px;
+        }
+
+        /* Styling for the temporary message box instead of alert() */
+        #message-box {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+        }
+        #message-box.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-soft-text leading-relaxed">
+
+    
+    <!-- Message Box (Used instead of alert/confirm) -->
+    <div id="message-box" class="bg-green-600 text-white"></div>
+
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-dark-bg/95 backdrop-blur-sm shadow-xl">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-accent-blue tracking-wider">Manish Kumar</a>
+            <nav class="hidden md:flex items-center space-x-6">
+                <a href="#about" class="text-sm font-medium hover:text-accent-blue transition duration-150">About</a>
+                <a href="#experience" class="text-sm font-medium hover:text-accent-blue transition duration-150">Experience</a>
+                <a href="#projects" class="text-sm font-medium hover:text-accent-blue transition duration-150">Projects</a>
+                <a href="#products" class="text-sm font-medium hover:text-accent-blue transition duration-150">Products</a> <!-- NEW MENU ITEM -->
+                <a href="#blog" class="text-sm font-medium hover:text-accent-blue transition duration-150">Blog</a>
+                <a href="#contact" class="text-sm font-medium hover:text-accent-blue transition duration-150">Contact</a>
+                <!-- New Subscribe Button -->
+                <a href="#subscribe" class="px-4 py-2 bg-green-500 text-dark-bg font-semibold rounded-lg shadow-lg hover:bg-green-400 transition duration-300 transform hover:scale-105 ml-4">
+                    Subscribe
+                </a>
+            </nav>
+            <!-- Mobile Menu Toggle Button -->
+            <button id="menu-button" aria-controls="mobile-menu" aria-expanded="false" class="md:hidden text-soft-text hover:text-accent-blue focus:outline-none focus:ring-2 focus:ring-accent-blue rounded-lg p-1 transition duration-150">
+                <!-- Open Icon (Hamburger) -->
+                <svg id="menu-icon-open" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <!-- Close Icon (X) -->
+                <svg id="menu-icon-close" class="w-7 h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (Hidden by default and slides out from the right) -->
+    <div id="mobile-menu" class="fixed inset-0 top-16 z-40 bg-dark-bg/98 backdrop-blur-md md:hidden hidden transform translate-x-full transition duration-300 ease-in-out">
+        <div class="px-4 pt-2 pb-3 space-y-3 sm:px-3 flex flex-col items-center text-lg font-medium h-full">
+            <a href="#about" class="mobile-nav-link block w-full text-center py-3 rounded-lg text-soft-text hover:bg-gray-700/50 hover:text-accent-blue transition duration-150">About</a>
+            <a href="#experience" class="mobile-nav-link block w-full text-center py-3 rounded-lg text-soft-text hover:bg_gray-700/50 hover:text-accent-blue transition duration-150">Experience</a>
+            <a href="#projects" class="mobile-nav-link block w-full text-center py-3 rounded-lg text-soft-text hover:bg-gray-700/50 hover:text-accent-blue transition duration-150">Projects</a>
+            <a href="#products" class="mobile-nav-link block w-full text-center py-3 rounded-lg text-soft-text hover:bg-gray-700/50 hover:text-accent-blue transition duration-150">Products</a> <!-- NEW MENU ITEM -->
+            <a href="#blog" class="mobile-nav-link block w-full text-center py-3 rounded-lg text-soft-text hover:bg-gray-700/50 hover:text-accent-blue transition duration-150">Blog</a>
+            <a href="#contact" class="mobile-nav-link block w-full text-center py-3 rounded-lg text-soft-text hover:bg_gray-700/50 hover:text-accent-blue transition duration-150">Contact</a>
+            
+            <a href="#subscribe" class="mobile-nav-link block w-full text-center mt-4 py-3 bg-green-500 text-dark-bg font-bold rounded-lg shadow-lg hover:bg-green-400 transition duration-300 transform hover:scale-[1.01] mb-4">
+                Subscribe
+            </a>
+            
+            <!-- Adding a subtle dark overlay footer for the mobile menu -->
+            <div class="pt-8 text-center text-sm text-gray-500 w-full">
+                <p>&copy; 2024 Manish CSE.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+
+        <!-- 1. Introduction Section -->
+        <section id="intro" class="mb-24 md:mb-32 pt-10">
+            <div class="grid md:grid-cols-12 gap-12 items-center">
+                
+                
+                <!-- Left Column: Text Content (takes 7 columns on desktop) -->
+                <div class="md:col-span-7">
+                    <p class="text-lg text-accent-blue font-semibold mb-2">Hello, I'm</p>
+                    <h1 class="text-6xl sm:text-7xl font-extrabold text-white mb-4">Manish Kumar</h1>
+                    <h2 class="text-3xl sm:text-4xl font-semibold text-gray-400 mb-6">Specialist – Quality Engineering @ LTIMindtree.</h2>
+                    <p class="text-xl text-gray-300">
+                        Career Objective: Improve software quality, meet customer expectations and reduce defects by supporting proven software quality practices and implementing practical and effective process improvement methods.
+                    </p>
+                    <div class="mt-8 flex space-x-4">
+                        <a href="#projects" class="px-6 py-3 bg-accent-blue text-white font-medium rounded-lg shadow-lg hover:bg-blue-600 transition duration-300 transform hover:scale-105">View Projects</a>
+                        <a href="#subscribe" class="px-6 py-3 border border-green-500 text-green-400 font-medium rounded-lg hover:bg-green-900/30 transition duration-300">Subscribe for Updates</a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Profile Image (takes 5 columns on desktop) -->
+                <div class="md:col-span-5 flex flex-col items-center md:items-end order-first md:order-last text-center md:text-right">
+                    <!-- Image Container -->
+                    <div class="w-64 h-64 sm:w-80 sm:h-80 md:w-full md:max-w-xs overflow-hidden rounded-full border-4 border-accent-blue shadow-2xl shadow-blue-500/50">
+                        <!-- Image source is the uploaded file name: MyPicture.jpg -->
+                        <img 
+                            src="MyPicture.jpg" 
+                            alt="Manish Kumar - Specialist Quality Engineering" 
+                            class="w-full h-full object-cover transition duration-500 ease-in-out hover:scale-105"
+                            onerror="this.onerror=null; this.src='https://placehold.co/800x800/0F172A/3B82F6?text=MK';"
+                        />
+                    </div>
+                    
+                    
+                    <!-- Location Tag -->
+                    <p class="mt-4 text-xl font-medium text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 inline-block mr-2 text-red-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        Bengaluru, Karnataka, India
+                    </p>
+
+                    
+                    <!-- Social Media Icons (New Addition) -->
+                    <div class="mt-4 flex space-x-4 justify-center md:justify-end">
+                        <!-- LinkedIn -->
+                        <a href="https://www.linkedin.com/in/manish-kumar-323bba78/" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-300 transform hover:scale-110" aria-label="LinkedIn Profile">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3v9zM6.5 8.25A1.75 1.75 0 118.25 6.5 1.75 1.75 0 016.5 8.25zM19 19h-3v-4.72c0-1.19-.48-1.59-1.31-1.59-1.31 0-1.69.96-1.69 2.48V19h-3v-9h3v1.39c.65-.95 1.25-1.64 2.85-1.64 2.07 0 3.65 1.37 3.65 4.38V19z"/></svg>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="https://www.facebook.com/RanaManishSinghCSE" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-300 transform hover:scale-110" aria-label="Facebook Profile">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22.7 0H1.3C.58 0 0 .58 0 1.3V22.7c0 .72.58 1.3 1.3 1.3H12V14.7h-3v-3h3V8.7c0-3.1 1.84-4.79 4.67-4.79 1.33 0 2.47.1 2.8.14V7.5H18.5c-1.48 0-1.78.7-1.78 1.76V11.7h3l-.52 3H15V24h7.7c.72 0 1.3-.58 1.3-1.3V1.3c0-.72-.58-1.3-1.3-1.3z"/></svg>
+                        </a>
+                        <!-- Instagram -->
+                        <a href="https://www.instagram.com/talk2_manishsinghrana/" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-300 transform hover:scale-110" aria-label="Instagram Profile">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.58.013 4.85.071 1.178.056 1.954.236 2.658.517.653.265 1.22.64 1.76.64.54 0 1.107-.375 1.76-.64.704-.281 1.48-.461 2.658-.517 1.27-.058 1.646-.071 4.85-.071zm0 2.138c3.15 0 3.49.012 4.74.07 1.14.055 1.76.223 2.37.47.58.23 1.05.52 1.54.91.49.39.78.86 1.01 1.44.24.61.41 1.23.47 2.37.058 1.25.07 1.59.07 4.74s-.012 3.49-.07 4.74c-.055 1.14-.223 1.76-.47 2.37-.23.58-.52 1.05-.91 1.54-.39.49-.86.78-1.44 1.01-.61.24-1.23.41-2.37.47-1.25.058-1.59.07-4.74.07s-3.49-.012-4.74-.07c-1.14-.055-1.76-.223-2.37-.47-.58-.23-1.05-.52-1.54-.91-.49-.39-.78-.86-1.01-1.44-.24-.61-.41-1.23-.47-2.37-.058-1.25-.07-1.59-.07-4.74s.012-3.49.07-4.74c.055-1.14.223-1.76.47-2.37.23-.58.52-1.05.91-1.54.39-.49.86-.78 1.44-1.01.61-.24 1.23-.41 2.37-.47C8.51 4.293 8.85 4.28 12 4.28zM12 7.863c-2.296 0-4.137 1.84-4.137 4.137s1.84 4.137 4.137 4.137 4.137-1.84 4.137-4.137-1.84-4.137-4.137-4.137zm0 2.138c1.15 0 2.05.9 2.05 2.05s-.9 2.05-2.05 2.05-2.05-.9-2.05-2.05.9-2.05 2.05-2.05zm6.577-3.665c-.58 0-1.05.47-1.05 1.05s.47 1.05 1.05 1.05 1.05-.47 1.05-1.05-.47-1.05-1.05-1.05z"/></svg>
+                        </a>
+                        <!-- Twitter (X) -->
+                        <a href="https://x.com/Talk2ManishRana" target="_blank" class="text-gray-400 hover:text-accent-blue transition duration-300 transform hover:scale-110" aria-label="X (Twitter) Profile">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.261 8.504 11.238h-7.143l-5.321-7.062-6.505 7.062h-3.308l7.66-8.736L2.99 2.25h7.33l4.745 6.404L18.244 2.25zm-2.88 15.118H18.7l-7.086-9.289-5.127 6.69z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. About Section -->
+        <section id="about" class="py-12 md:py-16 border-t border-gray-800">
+            <h3 class="text-4xl font-bold section-header mb-8">About Me</h3>
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="md:col-span-2 text-gray-300 space-y-4">
+                    <p>I am Manish Kumar, bringing over <a href="#experience" class="text-accent-blue hover:underline font-semibold transition duration-150">10.5 years of comprehensive experience</a> in Quality Assurance across diverse domains including Retail, Healthcare, Ed-Tech, and Insurance. My multifaceted expertise spans designing and delivering robust automation frameworks leveraging <span class="font-bold text-white">Selenium WebDriver with Java</span>, orchestrated through TestNG for efficient test management.</p>
+                    <p>Currently, I am contributing my expertise at <span class="font-bold text-white">LTIMindtree</span> for the past five years, collaborating closely with a global, multi-geographic US-based client. My role involves navigating complex, multinational project landscapes, delivering high-quality QA solutions that align with dynamic business requirements and regulatory standards across regions. Leveraging advanced automation frameworks and cutting-edge technologies, I ensure scalable and efficient testing practices that drive client satisfaction and operational excellence.</p>
+                    <p>I have hands-on experience integrating <span class="font-bold text-white">Continuous Integration and Continuous Deployment pipelines using Jenkins</span>, along with executing automated tests on scalable <span class="font-bold text-white">EC2 instances</span> to ensure reliable and efficient test executions. My API automation proficiency encompasses <span class="font-bold text-white">RestAssured and Postman</span>, enabling end-to-end validation of service layers with precision.</p>
+                    <p>For development and scripting, I proficiently use IntelliJ IDEA, Eclipse, and Visual Studio Code, complemented by <span class="font-bold text-white">Maven</span> as the build automation tool, streamlining project builds and dependency management.</p>
+                    <p>In leadership and team management, I excel at aligning QA teams with evolving client requirements, driving agile practices through active participation in daily stand-ups, sprint planning, and grooming sessions. I collaborate closely with Product Owners, Scrum Masters, development teams, and stakeholders to ensure seamless communication, timely delivery, and alignment with business goals.</p>
+                </div>
+                <div class="md:col-span-1">
+                    <h4 class="text-xl font-semibold text-white mb-4">Core Stack & Skills</h4>
+                    <ul class="grid grid-cols-2 gap-2 text-sm text-gray-400">
+                        <li>Java </li>
+                        <li>Python </li>
+                        <li>Selenium WebDriver, ROBOT, TestNG, Playwright</li>
+                        <li>TOSCA is a model-based test automation tool developed by Tricentis. Certificate</li>
+                        <li>Git, GitHub, Bit bucket, GitLab</li>
+                        <li>RESTful APIs</li>
+                        <li>Agile Methodology</li>
+                        <li>CI/CD (Jenkins/Git)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Experience Section (Detailed Timeline) -->
+        <section id="experience" class="py-12 md:py-16 border-t border-gray-800">
+            <h3 class="text-4xl font-bold section-header mb-12">Professional Experience</h3>
+
+            <div class="space-y-12">
+                
+                <!-- Job 1: LTIMindtree -->
+                <div class="relative pl-8 group">
+                    <!-- Timeline Dot and Line -->
+                    <div class="absolute w-2 h-full bg-gray-700 rounded-full left-0 top-0">
+                        <div class="absolute w-4 h-4 bg-accent-blue rounded-full -left-1 top-0 opacity-100 transition duration-300 transform group-hover:scale-110"></div>
+                    </div>
+                    <p class="text-sm font-medium text-gray-400 mb-1">April 2021 – Present</p>
+                    <h4 class="text-2xl font-semibold text-white">Specialist – Quality Engineering</h4>
+                    <p class="text-accent-blue font-medium mb-3">LTIMindtree, Bangalore</p>
+                    
+                    <p class="text-gray-300 mb-4 font-medium">Key Contributions & Projects (L'Oréal & Bekaert):</p>
+                    <ul class="list-disc ml-5 text-gray-300 space-y-2">
+                        <li>Lead role for global <span class="font-bold text-white">E-commerce (L'Oréal)</span> and <span class="font-bold text-white">Retail (Bekaert)</span> projects, handling <span class="font-bold text-white">Web, Mobile, and API testing</span>.</li>
+                        <li>Designed and maintained automation frameworks using <span class="font-bold text_white">Selenium with Java (TestNG)</span>, <span class="font-bold text-white">Playwright</span>, and <span class="font-bold text-white">ROBOT</span> Frameworks.</li>
+                        <li>Executed daily automation runs via <span class="font-bold text_white">Jenkins CI/CD pipeline</span> and utilized <span class="font-bold text_white">Bitbucket</span> for version control.</li>
+                        <li>Proficiently utilized management tools including <span class="font-bold text_white">Microsoft Azure, JIRA, Confluence, and Test Rail</span> for tracking and reporting.</li>
+                        <li>Involved in <span class="font-bold text_white">BDD (Behavior Driven Testing)</span> for feature execution and provided estimations on Azure DevOps user stories.</li>
+                    </ul>
+                </div>
+
+(This file is long; trimmed here — full content written into workspace.)

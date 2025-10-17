@@ -1,0 +1,11 @@
+{
+  "name": "manish-cse-site",
+  "version": "1.0.0",
+  "description": "Static portfolio site for Manish Kumar",
+  "scripts": {
+    "start": "live-server --port=3000 --no-browser --open=./index.html"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
