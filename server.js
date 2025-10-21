@@ -1,63 +1,69 @@
+
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { createObjectCsvWriter } = require('csv-writer');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 8081;
 
+// Serve static files (index.html, etc.) from the project root
+app.use(express.static(path.join(__dirname)));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Allow CORS for local testing (be conservative in production)
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
-
-const CSV_PATH = path.join(__dirname, 'subscriber.csv');
-
-// Ensure CSV file exists with header
-if (!fs.existsSync(CSV_PATH)) {
-  const header = 'timestamp,name,email\n';
-  fs.writeFileSync(CSV_PATH, header, { encoding: 'utf8' });
-}
-
-const csvWriter = createObjectCsvWriter({
-  path: CSV_PATH,
+// CSV Writer setup
+const csvWriter = createCsvWriter({
+  path: path.join(__dirname, 'subscriber.csv'),
   header: [
-    { id: 'timestamp', title: 'timestamp' },
-    { id: 'name', title: 'name' },
-    { id: 'email', title: 'email' }
+    {id: 'name', title: 'Name'},
+    {id: 'email', title: 'Email'},
+    {id: 'timestamp', title: 'Timestamp'}
   ],
   append: true
 });
 
 app.post('/subscribe', async (req, res) => {
+  const { name, email } = req.body;
+  if (!email) {
+    return res.status(400).json({ ok: false, message: 'Email is required' });
+  }
+  
   try {
-    const { name, email } = req.body;
-    if (!email) {
-      return res.status(400).json({ ok: false, message: 'Email is required' });
+    // Check if email already exists in CSV
+    const csvPath = path.join(__dirname, 'subscriber.csv');
+    let existingEmails = [];
+    
+    if (fs.existsSync(csvPath)) {
+      const csvContent = fs.readFileSync(csvPath, 'utf-8');
+      const lines = csvContent.split('\n').slice(1); // Skip header
+      existingEmails = lines
+        .filter(line => line.trim())
+        .map(line => {
+          const parts = line.split(',');
+          return parts[1]?.trim(); // Email is in second column
+        });
     }
-
-    const record = [{ timestamp: new Date().toISOString(), name: name || '', email }];
-    await csvWriter.writeRecords(record);
-
-    return res.json({ ok: true, message: 'Thanks for subscribing!' });
-  } catch (err) {
-    console.error('Subscribe error:', err);
-    return res.status(500).json({ ok: false, message: 'Internal server error' });
+    
+    // Check for duplicate
+    if (existingEmails.includes(email)) {
+      return res.status(409).json({ ok: false, message: 'This email is already subscribed!' });
+    }
+    
+    // Save new subscription
+    await csvWriter.writeRecords([
+      { name: name || '', email, timestamp: new Date().toISOString() }
+    ]);
+    res.status(200).json({ ok: true, message: 'Thanks for subscribing!' });
+  } catch (error) {
+    console.error('Subscribe error:', error);
+    res.status(500).json({ ok: false, message: 'Failed to subscribe' });
   }
 });
 
-// Simple health endpoint
-app.get('/health', (req, res) => res.json({ ok: true }));
-
-// Serve static files (optional) — keep existing static index.html served by live-server in dev
-app.use(express.static(path.join(__dirname)));
+app.get('/health', (req, res) => {
+  res.send('Server is running');
+});
 
 app.listen(PORT, () => {
-  console.log(`Subscription server listening on http://localhost:${PORT}`);
+  console.log(`Static site and subscription API running on http://localhost:${PORT}`);
 });
