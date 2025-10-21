@@ -7,8 +7,8 @@ const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const app = express();
 const PORT = 8081;
 
-// Google reCAPTCHA Secret Key (Test key - replace with your own for production)
-const RECAPTCHA_SECRET_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe';
+// Google reCAPTCHA Secret Key (Production)
+const RECAPTCHA_SECRET_KEY = '6LcJYvIrAAAAAFk_i5NhqROBLEYfleVhY7eP7YnN';
 
 // Serve static files (index.html, etc.) from the project root
 app.use(express.static(path.join(__dirname)));

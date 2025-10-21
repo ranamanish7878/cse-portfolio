@@ -7,13 +7,13 @@
 - Implemented both client-side and server-side validation
 - Using Google's test keys for development
 
-### 2. Current Test Keys (Working on localhost)
+### 2. Current Production Keys
 ```
-Site Key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
-Secret Key: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+Site Key: 6LcJYvIrAAAAAOAMCG4o54I-7vCJzSf-jKFue61X
+Secret Key: 6LcJYvIrAAAAAFk_i5NhqROBLEYfleVhY7eP7YnN
 ```
 
-**Note:** These are Google's official test keys that always pass validation. They work on localhost only.
+**Note:** These are your registered production keys for ranamanish7878.github.io and localhost.
 
 ### 3. Testing Locally
 1. Server is running on: http://localhost:8081
