@@ -430,7 +430,7 @@
                         <span class="text-xs font-semibold text-accent-blue uppercase">Automation | Java</span>
                         <h4 class="text-xl font-bold text-white mt-2 mb-3">Mastering the Selenium Page Object Model (POM)</h4>
                         <p class="text-sm text-gray-400">A detailed guide on structuring robust and maintainable test automation frameworks using POM with Java and TestNG. Includes best practices for factory patterns.</p>
-                        <a href="#" class="mt-4 inline-block text-accent-blue hover:text-blue-400 font-medium text-sm">Read Article &rarr;</a>
+                        <button onclick="openArticle('pom-article')" class="mt-4 inline-block text-accent-blue hover:text-blue-400 font-medium text-sm cursor-pointer">Read Article &rarr;</button>
                     </div>
                 </div>
 
@@ -554,12 +554,288 @@
 
     </main>
 
+    <!-- Article Modal -->
+    <div id="article-modal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden overflow-y-auto">
+        <div class="min-h-screen px-4 py-8">
+            <div class="max-w-4xl mx-auto bg-dark-bg rounded-xl shadow-2xl relative">
+                <!-- Close Button -->
+                <button onclick="closeArticle()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl font-bold">&times;</button>
+                
+                <!-- Article Content Container -->
+                <div id="article-content" class="p-8 md:p-12">
+                    <!-- Content will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POM Article Content (Hidden) -->
+    <div id="pom-article" class="hidden">
+        <article class="prose prose-invert max-w-none">
+            <h1 class="text-4xl font-bold text-white mb-4">Mastering the Selenium Page Object Model (POM)</h1>
+            <p class="text-gray-400 mb-8">By Manish Kumar | 10 min read | Automation, Java, Selenium</p>
+            
+            <div class="text-gray-300 space-y-6">
+                <h2 class="text-3xl font-bold text-white mt-8 mb-4">Introduction to Page Object Model</h2>
+                <p>The Page Object Model (POM) is a design pattern widely used in test automation that enhances test maintenance and reduces code duplication. It creates an object repository for storing all web elements, separating test code from page-specific code.</p>
+                
+                <h2 class="text-3xl font-bold text-white mt-8 mb-4">Why Use POM?</h2>
+                <ul class="list-disc ml-6 space-y-2">
+                    <li><strong>Maintainability:</strong> Changes in UI require updates in only one place</li>
+                    <li><strong>Reusability:</strong> Page classes can be used across multiple test scripts</li>
+                    <li><strong>Readability:</strong> Separates test logic from page interactions</li>
+                    <li><strong>Reduced Code Duplication:</strong> Common operations are centralized</li>
+                </ul>
+
+                <h2 class="text-3xl font-bold text-white mt-8 mb-4">Basic POM Structure</h2>
+                <pre class="bg-gray-900 p-4 rounded-lg overflow-x-auto"><code class="text-sm text-green-400">public class LoginPage {
+    WebDriver driver;
+    
+    // Locators
+    By usernameField = By.id("username");
+    By passwordField = By.id("password");
+    By loginButton = By.xpath("//button[@type='submit']");
+    
+    // Constructor
+    public LoginPage(WebDriver driver) {
+        this.driver = driver;
+    }
+    
+    // Page Methods
+    public void enterUsername(String username) {
+        driver.findElement(usernameField).sendKeys(username);
+    }
+    
+    public void enterPassword(String password) {
+        driver.findElement(passwordField).sendKeys(password);
+    }
+    
+    public void clickLogin() {
+        driver.findElement(loginButton).click();
+    }
+    
+    // High-level method
+    public HomePage login(String username, String password) {
+        enterUsername(username);
+        enterPassword(password);
+        clickLogin();
+        return new HomePage(driver);
+    }
+}</code></pre>
+
+                <h2 class="text-3xl font-bold text-white mt-8 mb-4">Advanced POM with PageFactory</h2>
+                <pre class="bg-gray-900 p-4 rounded-lg overflow-x-auto"><code class="text-sm text-green-400">public class LoginPage {
+    WebDriver driver;
+    
+    // Using @FindBy annotations
+    @FindBy(id = "username")
+    WebElement usernameField;
+    
+    @FindBy(id = "password")
+    WebElement passwordField;
+    
+    @FindBy(xpath = "//button[@type='submit']")
+    WebElement loginButton;
+    
+    // Constructor with PageFactory
+    public LoginPage(WebDriver driver) {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+    
+    public HomePage login(String username, String password) {
+        usernameField.sendKeys(username);
+        passwordField.sendKeys(password);
+        loginButton.click();
+        return new HomePage(driver);
+    }
+}</code></pre>
+
+                <h2 class="text-3xl font-bold text-white mt-8 mb-4">Factory Pattern Integration</h2>
+                <pre class="bg-gray-900 p-4 rounded-lg overflow-x-auto"><code class="text-sm text-green-400">public class PageFactory {
+    public static LoginPage getLoginPage(WebDriver driver) {
+        return new LoginPage(driver);
+    }
+    
+    public static HomePage getHomePage(WebDriver driver) {
+        return new HomePage(driver);
+    }
+    
+    public static DashboardPage getDashboardPage(WebDriver driver) {
+        return new DashboardPage(driver);
+    }
+}</code></pre>
+
+                <h2 class="text-3xl font-bold text-white mt-8 mb-4">20 Questions: Basic to Advanced</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">1. What is the Page Object Model?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> POM is a design pattern that creates an object repository for web UI elements. It separates page-specific code from test code, where each web page is represented as a class with elements as variables and user interactions as methods.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">2. What are the main advantages of using POM?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Code reusability, easy maintenance, better readability, reduced code duplication, separation of concerns, and improved collaboration between testers and developers.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">3. What is PageFactory in Selenium?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> PageFactory is a class that supports POM by providing @FindBy annotations to locate elements. It uses lazy initialization and the initElements() method to initialize web elements when the page object is created.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">4. Explain @FindBy annotation with examples.</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> @FindBy is used to locate elements. Examples:<br>
+                        - @FindBy(id = "username")<br>
+                        - @FindBy(name = "password")<br>
+                        - @FindBy(xpath = "//button[@type='submit']")<br>
+                        - @FindBy(css = ".login-button")<br>
+                        - @FindBy(linkText = "Click Here")</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">5. What is the difference between @FindBy and @FindBys?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> @FindBy finds a single element. @FindBys is used when you need to match ALL specified criteria (AND operation). @FindAll matches ANY criteria (OR operation).</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">6. How do you handle dynamic elements in POM?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Use explicit waits, parameterized XPath/CSS selectors, dynamic locator methods that accept parameters, or implement custom Expected Conditions with WebDriverWait.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">7. What is lazy initialization in PageFactory?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Elements are initialized only when they are first accessed, not when the page object is created. This improves performance and handles dynamic page loading scenarios.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">8. How do you implement BasePage class?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Create an abstract BasePage class with common methods like click(), sendKeys(), getText(), waitForElement(). All page classes extend this base class to inherit common functionality.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">9. Explain the Page Object Factory pattern.</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> A creational pattern that provides a centralized place to create and return page object instances. It encapsulates page object creation logic and can implement caching or singleton patterns.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">10. How do you handle page navigation in POM?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Methods that navigate to other pages return the next page object. Example: login() method returns HomePage object. This creates a fluent interface and maintains type safety.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">11. What are the best practices for element locators in POM?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Use ID when available, prefer CSS over XPath for performance, use data attributes for test automation, avoid absolute XPath, use meaningful locator names, and keep locators private with public methods for interaction.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">12. How do you implement custom wait conditions in POM?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Implement ExpectedCondition interface, create reusable wait methods in BasePage, use FluentWait for complex scenarios, and combine multiple conditions using logical operators.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">13. Explain LoadableComponent pattern in POM.</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> An advanced pattern where page objects extend LoadableComponent class. It provides load() and isLoaded() methods to ensure pages are properly loaded before interaction, improving test reliability.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">14. How do you handle iframes in POM?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Create methods to switch to iframe context, perform operations, then switch back. Encapsulate iframe switching in page methods to hide complexity from test code.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">15. What is the role of WebDriverManager in POM?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> WebDriverManager handles browser driver binaries automatically. In POM, it's typically used in a DriverFactory class to initialize drivers without manual setup, improving cross-platform compatibility.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">16. How do you implement parameterized page objects?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Pass parameters to page constructors or methods to handle dynamic content. Example: ProductPage(String productId) can handle different products using the same page object.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">17. Explain component-based POM architecture.</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Break complex pages into reusable components (Header, Footer, SearchBox). Each component is a separate class. Pages compose these components, promoting reusability and maintainability.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">18. How do you handle multiple environments in POM?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Use configuration files (properties/YAML), environment variables, or TestNG parameters. Create an EnvironmentConfig class to manage URLs, credentials, and environment-specific settings.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">19. What are common anti-patterns to avoid in POM?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Assertions in page classes, business logic in page objects, accessing driver directly from tests, not using waits, creating god objects with too many responsibilities, and tight coupling between pages.</p>
+                    </div>
+
+                    <div class="bg-gray-800 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-accent-blue mb-2">20. How do you implement POM with parallel execution?</h3>
+                        <p class="text-gray-300"><strong>Answer:</strong> Use ThreadLocal for WebDriver instances, ensure page objects are thread-safe, avoid static variables, use TestNG parallel execution with thread-count, and implement proper driver lifecycle management in @BeforeMethod and @AfterMethod.</p>
+                    </div>
+                </div>
+
+                <h2 class="text-3xl font-bold text-white mt-8 mb-4">Complete Example: E-Commerce Test</h2>
+                <pre class="bg-gray-900 p-4 rounded-lg overflow-x-auto"><code class="text-sm text-green-400">@Test
+public void testCompleteCheckout() {
+    // Initialize
+    LoginPage loginPage = PageFactory.getLoginPage(driver);
+    
+    // Navigate and perform actions
+    HomePage homePage = loginPage.login("user@test.com", "password123");
+    ProductPage productPage = homePage.searchProduct("Laptop");
+    CartPage cartPage = productPage.addToCart();
+    CheckoutPage checkoutPage = cartPage.proceedToCheckout();
+    OrderConfirmationPage confirmationPage = checkoutPage.completeOrder();
+    
+    // Assertions
+    Assert.assertTrue(confirmationPage.isOrderSuccessful());
+    Assert.assertNotNull(confirmationPage.getOrderNumber());
+}</code></pre>
+
+                <h2 class="text-3xl font-bold text-white mt-8 mb-4">Conclusion</h2>
+                <p>Mastering the Page Object Model is essential for building scalable and maintainable test automation frameworks. By following these principles and best practices, you can create robust automation suites that are easy to maintain and extend as your application grows.</p>
+                
+                <div class="mt-8 p-6 bg-accent-blue/10 border-l-4 border-accent-blue rounded">
+                    <p class="text-gray-300"><strong>Pro Tip:</strong> Start simple with basic POM structure, then gradually introduce advanced patterns like LoadableComponent, Factory, and component-based architecture as your framework matures.</p>
+                </div>
+            </div>
+        </article>
+    </div>
+
     <!-- Footer -->
     <footer class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-gray-800 text-center text-sm text-gray-500">
         <p>&copy; 2024 Manish CSE. Designed and built with Tailwind CSS.</p>
     </footer>
 
     <script>
+        // Article modal functions
+        function openArticle(articleId) {
+            const articleContent = document.getElementById(articleId).innerHTML;
+            document.getElementById('article-content').innerHTML = articleContent;
+            document.getElementById('article-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeArticle() {
+            document.getElementById('article-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeArticle();
+            }
+        });
+
+        // Close modal on background click
+        document.getElementById('article-modal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeArticle();
+            }
+        });
+
         // Utility function to display a custom message box instead of alert()
         function showMessage(message, type = 'success') {
             const box = document.getElementById('message-box');
