@@ -466,7 +466,7 @@
                     Join the community of quality-focused professionals!
                 </p>
                 
-                <form id="subscribe-form" class="flex flex-col sm:flex-row gap-4 justify-center">
+                <form id="subscribe-form" action="https://formspree.io/f/ranamanish7878@gmail.com" method="POST" class="flex flex-col sm:flex-row gap-4 justify-center">
                     <input 
                         type="text" 
                         id="name-input" 
@@ -482,6 +482,9 @@
                         placeholder="Enter your email" 
                         class="px-5 py-3 rounded-lg bg-gray-800 border border-gray-700 text-soft-text focus:outline-none focus:ring-2 focus:ring-accent-blue sm:w-64"
                     />
+                    <input type="hidden" name="_subject" value="New Portfolio Subscription Request">
+                    <input type="hidden" name="_next" value="https://ranamanish7878.github.io/cse-portfolio/#subscribe">
+                    <input type="hidden" name="_captcha" value="false">
                     <button type="submit" class="px-6 py-3 bg-green-500 text-dark-bg font-semibold rounded-lg shadow-lg hover:bg-green-400 transition duration-300">
                         Subscribe Now
                     </button>
@@ -589,6 +592,7 @@
             const name = nameInput.value.trim();
             const email = emailInput.value.trim();
             const statusMessage = document.getElementById('subscription-status');
+            const form = this;
 
             // Check if running locally (with backend server)
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -608,11 +612,12 @@
                 return;
             }
 
+            // Show submitting status
+            statusMessage.textContent = 'Submitting...';
+            statusMessage.className = 'mt-4 text-sm text-gray-400';
+
             // If running locally, use fetch to backend API
             if (isLocal) {
-                statusMessage.textContent = 'Submitting...';
-                statusMessage.className = 'mt-4 text-sm text-gray-400';
-
                 try {
                     const response = await fetch('/subscribe', {
                         method: 'POST',
@@ -639,19 +644,34 @@
                     showMessage('Network error - try again later', 'error');
                 }
             } else {
-                // For GitHub Pages deployment, open mailto link
-                const subject = encodeURIComponent('Portfolio Subscription Request');
-                const body = encodeURIComponent(`Name: ${name || 'Not provided'}\nEmail: ${email}\n\nPlease add me to your mailing list for updates on blog posts, automation tips, and project showcases.`);
-                const mailtoLink = `mailto:ranamanish7878@gmail.com?subject=${subject}&body=${body}`;
-                
-                window.location.href = mailtoLink;
-                
-                // Clear form and show success message
-                nameInput.value = '';
-                emailInput.value = '';
-                statusMessage.textContent = 'Opening your email client...';
-                statusMessage.className = 'mt-4 text-sm text-green-500 font-semibold';
-                showMessage('Opening your email client to complete subscription', 'success');
+                // For GitHub Pages deployment, use Formspree with AJAX
+                try {
+                    const formData = new FormData(form);
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        nameInput.value = '';
+                        emailInput.value = '';
+                        statusMessage.textContent = 'Thanks for subscribing! Check your email to confirm.';
+                        statusMessage.className = 'mt-4 text-sm text-green-500 font-semibold';
+                        showMessage('Thanks for subscribing!', 'success');
+                    } else {
+                        const data = await response.json();
+                        statusMessage.textContent = data.error || 'Subscription failed. Please try again.';
+                        statusMessage.className = 'mt-4 text-sm text-red-500';
+                        showMessage('Subscription failed. Please try again.', 'error');
+                    }
+                } catch (err) {
+                    statusMessage.textContent = 'Network error - please try again later';
+                    statusMessage.className = 'mt-4 text-sm text-red-500';
+                    showMessage('Network error - please try again later', 'error');
+                }
             }
         });
 
