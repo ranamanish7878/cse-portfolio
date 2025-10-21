@@ -6,6 +6,8 @@
     <title>Manish CSE | Computer Science Engineer & Developer</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google reCAPTCHA v2 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -466,22 +468,30 @@
                     Join the community of quality-focused professionals!
                 </p>
                 
-                <form id="subscribe-form" action="https://formspree.io/f/mnngywza" method="POST" class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <input 
-                        type="text" 
-                        id="name-input" 
-                        name="name" 
-                        placeholder="Your Name (Optional)" 
-                        class="px-5 py-3 rounded-lg bg-gray-800 border border-gray-700 text-soft-text focus:outline-none focus:ring-2 focus:ring-accent-blue sm:w-64"
-                    />
-                    <input 
-                        type="email" 
-                        id="email-input" 
-                        name="email" 
-                        required 
-                        placeholder="Enter your email" 
-                        class="px-5 py-3 rounded-lg bg-gray-800 border border-gray-700 text-soft-text focus:outline-none focus:ring-2 focus:ring-accent-blue sm:w-64"
-                    />
+                <form id="subscribe-form" action="https://formspree.io/f/mnngywza" method="POST" class="flex flex-col gap-4 items-center">
+                    <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                        <input 
+                            type="text" 
+                            id="name-input" 
+                            name="name" 
+                            placeholder="Your Name (Optional)" 
+                            class="px-5 py-3 rounded-lg bg-gray-800 border border-gray-700 text-soft-text focus:outline-none focus:ring-2 focus:ring-accent-blue sm:w-64"
+                        />
+                        <input 
+                            type="email" 
+                            id="email-input" 
+                            name="email" 
+                            required 
+                            placeholder="Enter your email" 
+                            class="px-5 py-3 rounded-lg bg-gray-800 border border-gray-700 text-soft-text focus:outline-none focus:ring-2 focus:ring-accent-blue sm:w-64"
+                        />
+                    </div>
+                    
+                    <!-- reCAPTCHA widget -->
+                    <div id="recaptcha-container" class="flex justify-center">
+                        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-theme="dark"></div>
+                    </div>
+                    
                     <input type="hidden" name="_subject" value="New Portfolio Subscription Request">
                     <input type="hidden" name="_next" value="https://ranamanish7878.github.io/cse-portfolio/#subscribe">
                     <input type="hidden" name="_captcha" value="false">
@@ -888,6 +898,15 @@ public void testCompleteCheckout() {
                 return;
             }
 
+            // Validate reCAPTCHA
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                showMessage('Please complete the reCAPTCHA verification.', 'error');
+                statusMessage.textContent = 'Please complete the reCAPTCHA verification.';
+                statusMessage.className = 'mt-4 text-sm text-red-500';
+                return;
+            }
+
             // Show submitting status
             statusMessage.textContent = 'Submitting...';
             statusMessage.className = 'mt-4 text-sm text-gray-400';
@@ -898,7 +917,7 @@ public void testCompleteCheckout() {
                     const response = await fetch('/subscribe', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name, email })
+                        body: JSON.stringify({ name, email, recaptchaToken: recaptchaResponse })
                     });
                     
                     const data = await response.json();
@@ -906,15 +925,18 @@ public void testCompleteCheckout() {
                     if (response.ok && data.ok) {
                         nameInput.value = '';
                         emailInput.value = '';
+                        grecaptcha.reset(); // Reset reCAPTCHA
                         statusMessage.textContent = 'Thanks for subscribing!';
                         statusMessage.className = 'mt-4 text-sm text-green-500 font-semibold';
                         showMessage('Thanks for subscribing!', 'success');
                     } else {
+                        grecaptcha.reset(); // Reset reCAPTCHA on error
                         statusMessage.textContent = data.message || 'Subscription failed';
                         statusMessage.className = 'mt-4 text-sm text-red-500';
                         showMessage(data.message || 'Subscription failed', 'error');
                     }
                 } catch (err) {
+                    grecaptcha.reset(); // Reset reCAPTCHA on error
                     statusMessage.textContent = 'Network error - try again later';
                     statusMessage.className = 'mt-4 text-sm text-red-500';
                     showMessage('Network error - try again later', 'error');
@@ -934,16 +956,19 @@ public void testCompleteCheckout() {
                     if (response.ok) {
                         nameInput.value = '';
                         emailInput.value = '';
+                        grecaptcha.reset(); // Reset reCAPTCHA
                         statusMessage.textContent = 'Thanks for subscribing! Check your email to confirm.';
                         statusMessage.className = 'mt-4 text-sm text-green-500 font-semibold';
                         showMessage('Thanks for subscribing!', 'success');
                     } else {
+                        grecaptcha.reset(); // Reset reCAPTCHA on error
                         const data = await response.json();
                         statusMessage.textContent = data.error || 'Subscription failed. Please try again.';
                         statusMessage.className = 'mt-4 text-sm text-red-500';
                         showMessage('Subscription failed. Please try again.', 'error');
                     }
                 } catch (err) {
+                    grecaptcha.reset(); // Reset reCAPTCHA on error
                     statusMessage.textContent = 'Network error - please try again later';
                     statusMessage.className = 'mt-4 text-sm text-red-500';
                     showMessage('Network error - please try again later', 'error');

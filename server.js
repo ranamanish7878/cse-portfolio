@@ -1,11 +1,14 @@
-
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const app = express();
 const PORT = 8081;
+
+// Google reCAPTCHA Secret Key (Test key - replace with your own for production)
+const RECAPTCHA_SECRET_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe';
 
 // Serve static files (index.html, etc.) from the project root
 app.use(express.static(path.join(__dirname)));
@@ -22,13 +25,61 @@ const csvWriter = createCsvWriter({
   append: true
 });
 
+// Function to verify reCAPTCHA token
+function verifyRecaptcha(token) {
+  return new Promise((resolve, reject) => {
+    const data = `secret=${RECAPTCHA_SECRET_KEY}&response=${token}`;
+    const options = {
+      hostname: 'www.google.com',
+      port: 443,
+      path: '/recaptcha/api/siteverify',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': data.length
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let body = '';
+      res.on('data', (chunk) => {
+        body += chunk;
+      });
+      res.on('end', () => {
+        try {
+          const result = JSON.parse(body);
+          resolve(result);
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+
+    req.on('error', (e) => {
+      reject(e);
+    });
+
+    req.write(data);
+    req.end();
+  });
+}
+
 app.post('/subscribe', async (req, res) => {
-  const { name, email } = req.body;
+  const { name, email, recaptchaToken } = req.body;
   if (!email) {
     return res.status(400).json({ ok: false, message: 'Email is required' });
   }
-  
+
+  // Verify reCAPTCHA
+  if (!recaptchaToken) {
+    return res.status(400).json({ ok: false, message: 'reCAPTCHA verification is required' });
+  }
+
   try {
+    const recaptchaResult = await verifyRecaptcha(recaptchaToken);
+    if (!recaptchaResult.success) {
+      return res.status(400).json({ ok: false, message: 'reCAPTCHA verification failed. Please try again.' });
+    }
     // Check if email already exists in CSV
     const csvPath = path.join(__dirname, 'subscriber.csv');
     let existingEmails = [];
