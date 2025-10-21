@@ -466,7 +466,7 @@
                     Join the community of quality-focused professionals!
                 </p>
                 
-                <form id="subscribe-form" action="https://formspree.io/f/xanyazaq" method="POST" class="flex flex-col sm:flex-row gap-4 justify-center">
+                <form id="subscribe-form" class="flex flex-col sm:flex-row gap-4 justify-center">
                     <input 
                         type="text" 
                         id="name-input" 
@@ -482,7 +482,6 @@
                         placeholder="Enter your email" 
                         class="px-5 py-3 rounded-lg bg-gray-800 border border-gray-700 text-soft-text focus:outline-none focus:ring-2 focus:ring-accent-blue sm:w-64"
                     />
-                    <input type="hidden" name="_subject" value="New Subscription from Portfolio">
                     <button type="submit" class="px-6 py-3 bg-green-500 text-dark-bg font-semibold rounded-lg shadow-lg hover:bg-green-400 transition duration-300">
                         Subscribe Now
                     </button>
@@ -584,6 +583,7 @@
 
         // Event listener for the subscription form
         document.getElementById('subscribe-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
             const nameInput = document.getElementById('name-input');
             const emailInput = document.getElementById('email-input');
             const name = nameInput.value.trim();
@@ -594,7 +594,6 @@
             const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
             if (!email) {
-                e.preventDefault();
                 showMessage('Please enter a valid email address.', 'error');
                 statusMessage.textContent = 'Please enter a valid email address.';
                 statusMessage.className = 'mt-4 text-sm text-red-500';
@@ -603,7 +602,6 @@
 
             // Simple client-side email validation
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                e.preventDefault();
                 showMessage('The email format is invalid. Please check your spelling.', 'error');
                 statusMessage.textContent = 'The email format is invalid.';
                 statusMessage.className = 'mt-4 text-sm text-red-500';
@@ -612,7 +610,6 @@
 
             // If running locally, use fetch to backend API
             if (isLocal) {
-                e.preventDefault();
                 statusMessage.textContent = 'Submitting...';
                 statusMessage.className = 'mt-4 text-sm text-gray-400';
 
@@ -642,10 +639,19 @@
                     showMessage('Network error - try again later', 'error');
                 }
             } else {
-                // For GitHub Pages deployment, form will submit to Formspree
-                statusMessage.textContent = 'Submitting...';
-                statusMessage.className = 'mt-4 text-sm text-gray-400';
-                // Let the form submit naturally to Formspree
+                // For GitHub Pages deployment, open mailto link
+                const subject = encodeURIComponent('Portfolio Subscription Request');
+                const body = encodeURIComponent(`Name: ${name || 'Not provided'}\nEmail: ${email}\n\nPlease add me to your mailing list for updates on blog posts, automation tips, and project showcases.`);
+                const mailtoLink = `mailto:ranamanish7878@gmail.com?subject=${subject}&body=${body}`;
+                
+                window.location.href = mailtoLink;
+                
+                // Clear form and show success message
+                nameInput.value = '';
+                emailInput.value = '';
+                statusMessage.textContent = 'Opening your email client...';
+                statusMessage.className = 'mt-4 text-sm text-green-500 font-semibold';
+                showMessage('Opening your email client to complete subscription', 'success');
             }
         });
 
