@@ -919,8 +919,9 @@ public void testCompleteCheckout() {
             }
 
             // Validate reCAPTCHA (skip on localhost)
+            let recaptchaResponse = null;
             if (!isLocal) {
-                const recaptchaResponse = grecaptcha.getResponse();
+                recaptchaResponse = grecaptcha.getResponse();
                 if (!recaptchaResponse) {
                     showMessage('Please complete the reCAPTCHA verification.', 'error');
                     statusMessage.textContent = 'Please complete the reCAPTCHA verification.';

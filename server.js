@@ -70,16 +70,20 @@ app.post('/subscribe', async (req, res) => {
     return res.status(400).json({ ok: false, message: 'Email is required' });
   }
 
-  // Verify reCAPTCHA
-  if (!recaptchaToken) {
-    return res.status(400).json({ ok: false, message: 'reCAPTCHA verification is required' });
+  // Verify reCAPTCHA (optional for localhost testing)
+  if (recaptchaToken) {
+    try {
+      const recaptchaResult = await verifyRecaptcha(recaptchaToken);
+      if (!recaptchaResult.success) {
+        return res.status(400).json({ ok: false, message: 'reCAPTCHA verification failed. Please try again.' });
+      }
+    } catch (error) {
+      console.error('reCAPTCHA verification error:', error);
+      return res.status(500).json({ ok: false, message: 'reCAPTCHA verification error' });
+    }
   }
 
   try {
-    const recaptchaResult = await verifyRecaptcha(recaptchaToken);
-    if (!recaptchaResult.success) {
-      return res.status(400).json({ ok: false, message: 'reCAPTCHA verification failed. Please try again.' });
-    }
     // Check if email already exists in CSV
     const csvPath = path.join(__dirname, 'subscriber.csv');
     let existingEmails = [];
