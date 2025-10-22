@@ -487,8 +487,8 @@
                         />
                     </div>
                     
-                    <!-- reCAPTCHA widget -->
-                    <div id="recaptcha-container" class="flex justify-center">
+                    <!-- reCAPTCHA widget (hidden on localhost) -->
+                    <div id="recaptcha-container" class="flex justify-center" style="display: none;">
                         <div class="g-recaptcha" data-sitekey="6LcJYvIrAAAAAOAMCG4o54I-7vCJzSf-jKFue61X" data-theme="dark"></div>
                     </div>
                     
@@ -832,6 +832,15 @@ public void testCompleteCheckout() {
             document.body.style.overflow = 'auto'; // Restore scrolling
         }
 
+        // Show reCAPTCHA only on deployed sites (not localhost)
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const recaptchaContainer = document.getElementById('recaptcha-container');
+            if (!isLocal && recaptchaContainer) {
+                recaptchaContainer.style.display = 'flex';
+            }
+        });
+
         // Close modal on Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
@@ -898,13 +907,26 @@ public void testCompleteCheckout() {
                 return;
             }
 
-            // Validate reCAPTCHA
-            const recaptchaResponse = grecaptcha.getResponse();
-            if (!recaptchaResponse) {
-                showMessage('Please complete the reCAPTCHA verification.', 'error');
-                statusMessage.textContent = 'Please complete the reCAPTCHA verification.';
-                statusMessage.className = 'mt-4 text-sm text-red-500';
-                return;
+            // Check for duplicate email in localStorage (for deployed sites)
+            if (!isLocal) {
+                const subscribedEmails = JSON.parse(localStorage.getItem('subscribedEmails') || '[]');
+                if (subscribedEmails.includes(email.toLowerCase())) {
+                    showMessage('This email is already subscribed!', 'error');
+                    statusMessage.textContent = 'This email is already subscribed!';
+                    statusMessage.className = 'mt-4 text-sm text-red-500';
+                    return;
+                }
+            }
+
+            // Validate reCAPTCHA (skip on localhost)
+            if (!isLocal) {
+                const recaptchaResponse = grecaptcha.getResponse();
+                if (!recaptchaResponse) {
+                    showMessage('Please complete the reCAPTCHA verification.', 'error');
+                    statusMessage.textContent = 'Please complete the reCAPTCHA verification.';
+                    statusMessage.className = 'mt-4 text-sm text-red-500';
+                    return;
+                }
             }
 
             // Show submitting status
@@ -925,18 +947,24 @@ public void testCompleteCheckout() {
                     if (response.ok && data.ok) {
                         nameInput.value = '';
                         emailInput.value = '';
-                        grecaptcha.reset(); // Reset reCAPTCHA
+                        if (!isLocal && typeof grecaptcha !== 'undefined') {
+                            grecaptcha.reset(); // Reset reCAPTCHA
+                        }
                         statusMessage.textContent = 'Thanks for subscribing!';
                         statusMessage.className = 'mt-4 text-sm text-green-500 font-semibold';
                         showMessage('Thanks for subscribing!', 'success');
                     } else {
-                        grecaptcha.reset(); // Reset reCAPTCHA on error
+                        if (!isLocal && typeof grecaptcha !== 'undefined') {
+                            grecaptcha.reset(); // Reset reCAPTCHA on error
+                        }
                         statusMessage.textContent = data.message || 'Subscription failed';
                         statusMessage.className = 'mt-4 text-sm text-red-500';
                         showMessage(data.message || 'Subscription failed', 'error');
                     }
                 } catch (err) {
-                    grecaptcha.reset(); // Reset reCAPTCHA on error
+                    if (!isLocal && typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset(); // Reset reCAPTCHA on error
+                    }
                     statusMessage.textContent = 'Network error - try again later';
                     statusMessage.className = 'mt-4 text-sm text-red-500';
                     showMessage('Network error - try again later', 'error');
@@ -956,19 +984,31 @@ public void testCompleteCheckout() {
                     if (response.ok) {
                         nameInput.value = '';
                         emailInput.value = '';
-                        grecaptcha.reset(); // Reset reCAPTCHA
+                        if (typeof grecaptcha !== 'undefined') {
+                            grecaptcha.reset(); // Reset reCAPTCHA
+                        }
+                        // Store email in localStorage to prevent duplicates
+                        const subscribedEmails = JSON.parse(localStorage.getItem('subscribedEmails') || '[]');
+                        if (!subscribedEmails.includes(email.toLowerCase())) {
+                            subscribedEmails.push(email.toLowerCase());
+                            localStorage.setItem('subscribedEmails', JSON.stringify(subscribedEmails));
+                        }
                         statusMessage.textContent = 'Thanks for subscribing! Check your email to confirm.';
                         statusMessage.className = 'mt-4 text-sm text-green-500 font-semibold';
                         showMessage('Thanks for subscribing!', 'success');
                     } else {
-                        grecaptcha.reset(); // Reset reCAPTCHA on error
+                        if (typeof grecaptcha !== 'undefined') {
+                            grecaptcha.reset(); // Reset reCAPTCHA on error
+                        }
                         const data = await response.json();
                         statusMessage.textContent = data.error || 'Subscription failed. Please try again.';
                         statusMessage.className = 'mt-4 text-sm text-red-500';
                         showMessage('Subscription failed. Please try again.', 'error');
                     }
                 } catch (err) {
-                    grecaptcha.reset(); // Reset reCAPTCHA on error
+                    if (typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset(); // Reset reCAPTCHA on error
+                    }
                     statusMessage.textContent = 'Network error - please try again later';
                     statusMessage.className = 'mt-4 text-sm text-red-500';
                     showMessage('Network error - please try again later', 'error');
